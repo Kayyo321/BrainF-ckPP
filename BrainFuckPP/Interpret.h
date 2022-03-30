@@ -45,59 +45,87 @@ int interpret(string code) {
 
 		switch (instruction) {
 		case '+':
-			tape[cellIndex] += multiplier;
+			if (stage != 1) {
+				tape[cellIndex] += 1;
+
+				multiplier = 1;
+			}
 			break;
 		case '-':
-			tape[cellIndex] -= multiplier;
+			if (stage != 1) {
+				tape[cellIndex] -= 1;
+
+				multiplier = 1;
+			}
 			break;
 		case '<':
-			cellIndex -= multiplier;
+			if (stage != 1) {
+				cellIndex -= 1;
+
+				multiplier = 1;
+			}
 			break;
 		case '>':
-			cellIndex += multiplier;
-			if (cellIndex == tape.size()) {
-				tape.push_back(0);
+			if (stage != 1) {
+				cellIndex += 1;
+			
+				if (cellIndex == tape.size()) {
+					tape.push_back(0);
+				}
 			}
+
+			multiplier = 1;
 			break;
 		case '.':
-			if (literal) {
-				cout << (int)tape[cellIndex];
-			}
-			else {
-				cout << tape[cellIndex];
+			if (stage != 1) {
+				if (literal) {
+					cout << (int)tape[cellIndex];
+				}
+				else {
+					cout << tape[cellIndex];
+				}
 			}
 			break;
 		case ',':
-			if (userInput.empty()) {
-				cin >> userInput;
-				userInput.push_back('\n');
+			if (stage != 1) {
+				if (userInput.empty()) {
+					cin >> userInput;
+					userInput.push_back('\n');
+				}
+				tape[cellIndex] = userInput[0];
+				userInput.erase(0, 1);
 			}
-			tape[cellIndex] = userInput[0];
-			userInput.erase(0, 1);
 			break;
 		case '[':
-			if (!tape[cellIndex]) {
-				ip = loopTable[ip];
+			if (stage != 1) {
+				if (!tape[cellIndex]) {
+					ip = loopTable[ip];
+				}
 			}
 			break;
 		case ']':
-			if (tape[cellIndex]) {
-				ip = loopTable[ip];
+			if (stage != 1) {
+				if (tape[cellIndex]) {
+					ip = loopTable[ip];
+				}
 			}
 			break;
 		case '/':
-			literal = !literal;
+			if (stage != 1) literal = !literal;
+			break;
+		case '#':
+			if (stage == 0) stage = 1;
+
+			if (stage == 1) stage = 0;
+			break;
+		default:
+			if (isdigit(instruction) && stage != 1) {
+				multiplier = instruction;
+			}
 			break;
 		}
 
-		if (stage == 2) {
-			tmp += instruction;
-		}
-
-		if (stage == 1) stage++;
-
 		ip++;
-		multiplier = 1;
 	}
 
 	return 0;
