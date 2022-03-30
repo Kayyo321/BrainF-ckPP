@@ -43,87 +43,104 @@ int interpret(string code) {
 	while (ip < program.size()) {
 		instruction = program[ip];
 
+		#pragma region MainBrainFuckCode
 		switch (instruction) {
-		case '+':
-			if (stage != 1) {
-				tape[cellIndex] += 1;
+			case '+':
+				if (stage != 1) {
+					tape[cellIndex] += 1;
 
-				multiplier = 1;
-			}
-			break;
-		case '-':
-			if (stage != 1) {
-				tape[cellIndex] -= 1;
+					multiplier = 1;
+				}
+				break;
+			case '-':
+				if (stage != 1) {
+					tape[cellIndex] -= 1;
 
-				multiplier = 1;
-			}
-			break;
-		case '<':
-			if (stage != 1) {
-				cellIndex -= 1;
+					multiplier = 1;
+				}
+				break;
+			case '<':
+				if (stage != 1) {
+					cellIndex -= 1;
 
-				multiplier = 1;
-			}
-			break;
-		case '>':
-			if (stage != 1) {
-				cellIndex += 1;
+					multiplier = 1;
+				}
+				break;
+			case '>':
+				if (stage != 1) {
+					cellIndex += 1;
 			
-				if (cellIndex == tape.size()) {
-					tape.push_back(0);
+					if (cellIndex == tape.size()) {
+						tape.push_back(0);
+					}
 				}
-			}
 
-			multiplier = 1;
-			break;
-		case '.':
-			if (stage != 1) {
-				if (literal) {
-					cout << (int)tape[cellIndex];
+				multiplier = 1;
+				break;
+			case '.':
+				if (stage != 1) {
+					if (literal) {
+						cout << (int)tape[cellIndex];
+					}
+					else {
+						cout << tape[cellIndex];
+					}
 				}
-				else {
-					cout << tape[cellIndex];
+				break;
+			case ',':
+				if (stage != 1) {
+					if (userInput.empty()) {
+						cin >> userInput;
+						userInput.push_back('\n');
+					}
+					tape[cellIndex] = userInput[0];
+					userInput.erase(0, 1);
 				}
-			}
-			break;
-		case ',':
-			if (stage != 1) {
-				if (userInput.empty()) {
-					cin >> userInput;
-					userInput.push_back('\n');
+				break;
+			case '[':
+				if (stage != 1) {
+					if (!tape[cellIndex]) {
+						ip = loopTable[ip];
+					}
 				}
-				tape[cellIndex] = userInput[0];
-				userInput.erase(0, 1);
-			}
-			break;
-		case '[':
-			if (stage != 1) {
-				if (!tape[cellIndex]) {
-					ip = loopTable[ip];
+				break;
+			case ']':
+				if (stage != 1) {
+					if (tape[cellIndex]) {
+						ip = loopTable[ip];
+					}
 				}
-			}
-			break;
-		case ']':
-			if (stage != 1) {
-				if (tape[cellIndex]) {
-					ip = loopTable[ip];
-				}
-			}
-			break;
-		case '/':
-			if (stage != 1) literal = !literal;
-			break;
-		case '#':
-			if (stage == 0) stage = 1;
-
-			if (stage == 1) stage = 0;
-			break;
-		default:
-			if (isdigit(instruction) && stage != 1) {
-				multiplier = instruction;
-			}
-			break;
+				break;
 		}
+		#pragma endregion
+
+		#pragma region BrainFuck++Code
+		switch (instruction) {
+			case '^':
+				if (stage != 1) {
+					tape[cellIndex] * tape[cellIndex];
+
+					multiplier = 1;
+				}
+				break;
+			case '*':
+				cout << endl;
+				break;
+			case '/':
+				if (stage != 1) literal = !literal;
+				break;
+			case '#':
+				if (stage == 1) stage = 0;
+				
+				if (stage == 0) stage = 1;
+				break;
+			default:
+				if (isdigit(instruction) && stage != 1) {
+					multiplier = instruction;
+				}
+				break;
+		}
+		#pragma endregion
 
 		ip++;
 	}
