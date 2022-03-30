@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-
 #include "Interpret.h"
 
 using namespace std;

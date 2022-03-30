@@ -7,8 +7,17 @@
 
 using namespace std;
 
-int interpret(std::string program) {
+int interpret(string code) {
+	string program = code;
+
+	size_t ip = 0;
+
+	vector<string> variablesContent = {};
+	vector<string> toRun = {};
 	vector<unsigned char> tape = { 0 };
+	
+	vector<string> variables = {};
+
 	size_t cell_index = 0;
 
 	string user_input;
@@ -34,7 +43,7 @@ int interpret(std::string program) {
 		}
 	}
 
-	size_t ip = 0;
+	ip = 0;
 
 	while (ip < program.size()) {
 		instruction = program[ip];
@@ -56,11 +65,11 @@ int interpret(std::string program) {
 			}
 			break;
 		case '.':
-			std::cout << tape[cell_index];
+			cout << tape[cell_index];
 			break;
 		case ',':
 			if (user_input.empty()) {
-				std::cin >> user_input;
+				cin >> user_input;
 				user_input.push_back('\n');
 			}
 			tape[cell_index] = user_input[0];
@@ -80,8 +89,21 @@ int interpret(std::string program) {
 			if (stage == 0) stage++;
 			break;
 		case ')':
-			if (stage == 2) stage--;
-			std::cout << tmp << endl;
+			if (stage == 2) stage = 0;
+			
+			variables.push_back(tmp);
+
+			tmp = "";
+			break;
+		case '{':
+			if (stage == 0) stage++;
+			break;
+		case '}':
+			if (stage == 2) stage = 0;
+
+			variablesContent.push_back(tmp);
+
+			tmp = "";
 			break;
 		}
 
@@ -97,4 +119,3 @@ int interpret(std::string program) {
 
 	return 0;
 }
-
