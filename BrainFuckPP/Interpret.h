@@ -21,7 +21,8 @@ int interpret(string code) {
 
 	unordered_map<size_t, size_t> loopTable;
 
-	int stage = 0;
+	int readChar = 0;
+	int ifStage = 0;
 
 	bool literal = false;
 
@@ -46,28 +47,28 @@ int interpret(string code) {
 		#pragma region MainBrainFuckCode
 		switch (instruction) {
 			case '+':
-				if (stage != 1) {
+				if (readChar != 1) {
 					tape[cellIndex] += 1;
 
 					multiplier = 1;
 				}
 				break;
 			case '-':
-				if (stage != 1) {
+				if (readChar != 1) {
 					tape[cellIndex] -= 1;
 
 					multiplier = 1;
 				}
 				break;
 			case '<':
-				if (stage != 1) {
+				if (readChar != 1) {
 					cellIndex -= 1;
 
 					multiplier = 1;
 				}
 				break;
 			case '>':
-				if (stage != 1) {
+				if (readChar != 1) {
 					cellIndex += 1;
 			
 					if (cellIndex == tape.size()) {
@@ -78,7 +79,7 @@ int interpret(string code) {
 				multiplier = 1;
 				break;
 			case '.':
-				if (stage != 1) {
+				if (readChar != 1) {
 					if (literal) {
 						cout << (int)tape[cellIndex];
 					}
@@ -88,7 +89,7 @@ int interpret(string code) {
 				}
 				break;
 			case ',':
-				if (stage != 1) {
+				if (readChar != 1) {
 					if (userInput.empty()) {
 						cin >> userInput;
 						userInput.push_back('\n');
@@ -98,14 +99,14 @@ int interpret(string code) {
 				}
 				break;
 			case '[':
-				if (stage != 1) {
+				if (readChar != 1) {
 					if (!tape[cellIndex]) {
 						ip = loopTable[ip];
 					}
 				}
 				break;
 			case ']':
-				if (stage != 1) {
+				if (readChar != 1) {
 					if (tape[cellIndex]) {
 						ip = loopTable[ip];
 					}
@@ -117,8 +118,8 @@ int interpret(string code) {
 		#pragma region BrainFuck++Code
 		switch (instruction) {
 			case '^':
-				if (stage != 1) {
-					tape[cellIndex] * tape[cellIndex];
+				if (readChar != 1) {
+					tape[cellIndex] = (tape[cellIndex] * tape[cellIndex]);
 
 					multiplier = 1;
 				}
@@ -127,22 +128,40 @@ int interpret(string code) {
 				cout << endl;
 				break;
 			case '/':
-				if (stage != 1) literal = !literal;
+				if (readChar != 1) literal = !literal;
 				break;
 			case '#':
-				if (stage == 1) stage = 0;
+				if (readChar == 1) readChar = 0;
 				
-				if (stage == 0) stage = 1;
+				if (readChar == 0) readChar = 1;
+				break;
+			case '$':
+
+				system("CLS");
+
+				break;
+			case '\\':
+				readChar = 1;
+
+				ip++;
 				break;
 			default:
-				if (isdigit(instruction) && stage != 1) {
+				if (isdigit(instruction) && readChar != 1) {
 					multiplier = instruction;
 				}
 				break;
 		}
 		#pragma endregion
 
+		if (ifStage == 1) readChar = 2;
+
+		if (ifStage == 2) {
+			tmp += instruction;
+		}
+
 		ip++;
+
+		if (readChar == 1) readChar = 0;
 	}
 
 	return 0;
