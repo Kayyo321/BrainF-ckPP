@@ -7,4 +7,4 @@
 # How to run
 
 If you're a Visual Studio enthusiast like me, just open up the .sln file and press ```F5```. If you don't want to do that, 
-go to [build/Release](build/Release) and run the ```BrainFuckPP.exe``` executable
+go to [build/Release](BrainFuckPP/build/Release) and run the ```BrainFuckPP.exe``` executable
