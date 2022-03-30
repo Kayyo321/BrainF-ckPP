@@ -8,114 +8,112 @@
 using namespace std;
 
 int interpret(string code) {
-	string program = code;
+	vector<unsigned char> tape = { 0 };
 
 	size_t ip = 0;
+	size_t cellIndex = 0;
+	size_t loopBeginningIndex;
 
-	vector<string> variablesContent = {};
-	vector<string> toRun = {};
-	vector<unsigned char> tape = { 0 };
-	
-	vector<string> variables = {};
-
-	size_t cell_index = 0;
-
-	string user_input;
+	string program = code;
+	string userInput;
 	string tmp;
 
-	unordered_map<size_t, size_t> loop_table;
+	unordered_map<size_t, size_t> loopTable;
 
 	int stage = 0;
 
 	char instruction;
-	size_t loop_beginning_index;
-	stack<size_t> loop_stack;
+	stack<size_t> loopStack;
 	for (size_t ip = 0; ip < program.size(); ip++) {
 		instruction = program[ip];
 		if (instruction == '[') {
-			loop_stack.push(ip);
+			loopStack.push(ip);
 		}
 		else if (instruction == ']') {
-			loop_beginning_index = loop_stack.top();
-			loop_stack.pop();
-			loop_table[loop_beginning_index] = ip;
-			loop_table[ip] = loop_beginning_index;
+			loopBeginningIndex = loopStack.top();
+			loopStack.pop();
+			loopTable[loopBeginningIndex] = ip;
+			loopTable[ip] = loopBeginningIndex;
 		}
 	}
-
-	ip = 0;
 
 	while (ip < program.size()) {
 		instruction = program[ip];
 
 		switch (instruction) {
 		case '+':
-			tape[cell_index] += 1;
+			tape[cellIndex] += 1;
 			break;
 		case '-':
-			tape[cell_index] -= 1;
+			tape[cellIndex] -= 1;
 			break;
 		case '<':
-			cell_index--;
+			cellIndex--;
 			break;
 		case '>':
-			cell_index++;
-			if (cell_index == tape.size()) {
+			cellIndex++;
+			if (cellIndex == tape.size()) {
 				tape.push_back(0);
 			}
 			break;
 		case '.':
-			cout << tape[cell_index];
+			cout << tape[cellIndex];
 			break;
 		case ',':
-			if (user_input.empty()) {
-				cin >> user_input;
-				user_input.push_back('\n');
+			if (userInput.empty()) {
+				cin >> userInput;
+				userInput.push_back('\n');
 			}
-			tape[cell_index] = user_input[0];
-			user_input.erase(0, 1);
+			tape[cellIndex] = userInput[0];
+			userInput.erase(0, 1);
 			break;
 		case '[':
-			if (!tape[cell_index]) {
-				ip = loop_table[ip];
+			if (!tape[cellIndex]) {
+				ip = loopTable[ip];
 			}
 			break;
 		case ']':
-			if (tape[cell_index]) {
-				ip = loop_table[ip];
+			if (tape[cellIndex]) {
+				ip = loopTable[ip];
 			}
 			break;
 		case '(':
 			if (stage == 0) stage++;
 			break;
 		case ')':
-			if (stage == 2) stage = 0;
-			
-			variables.push_back(tmp);
+			if (stage == 2) {
+				stage = 0;
 
-			tmp = "";
-			break;
-		case '{':
-			if (stage == 0) stage++;
-			break;
-		case '}':
-			if (stage == 2) stage = 0;
+				for (int i = 0; i < tmp.length(); i++)
+				{
+					tape[cellIndex] = (int)tmp[i];
+				}
 
-			variablesContent.push_back(tmp);
-
-			tmp = "";
+				tmp = "";
+			}
 			break;
 		}
 
-		if (stage == 1) {
-			stage++;
-		}
-		else if (stage == 2) {
+		if (stage == 2) {
 			tmp += instruction;
 		}
 
+		if (stage == 1) stage++;
+
 		ip++;
 	}
+
+	delete &ip;
+	delete &code;
+	delete &tape;
+	delete &cellIndex;
+	delete &userInput;
+	delete &tmp;
+	delete &loopTable;
+	delete &stage;
+	delete &instruction;
+	delete &loopBeginningIndex;
+	delete &loopStack;
 
 	return 0;
 }
