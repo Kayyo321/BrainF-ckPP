@@ -1,3 +1,20 @@
+>++++++++[<+++++++++>-]<.
+>++++[<+++++++>-]<+.
++++++++..
 +++.
+>>++++++[<+++++++>-]<++.
+------------.
+>++++++[<+++++++++>-]<+.
+<.
++++.
+------.
+--------.
+>>>++++[<++++++++>-]<+.*
+
+# the '/' command makes it so whenever you print, you print out the actual digits, not ascii #
+# " / +++. / +++. ", for example, the first one, the one inside the /'s, will print out a number, #
+# the one on the outside will print a heart character #
+
+***
 
 # The astric adds an 'endl' #
