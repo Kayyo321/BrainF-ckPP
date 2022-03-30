@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32228.343
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BrainFuckPP", "BrainFuckPP.vcxproj", "{BBD9C918-9260-4C61-B533-0FE5F486C8ED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BBD9C918-9260-4C61-B533-0FE5F486C8ED}.Debug|x64.ActiveCfg = Debug|x64
+		{BBD9C918-9260-4C61-B533-0FE5F486C8ED}.Debug|x64.Build.0 = Debug|x64
+		{BBD9C918-9260-4C61-B533-0FE5F486C8ED}.Debug|x86.ActiveCfg = Debug|Win32
+		{BBD9C918-9260-4C61-B533-0FE5F486C8ED}.Debug|x86.Build.0 = Debug|Win32
+		{BBD9C918-9260-4C61-B533-0FE5F486C8ED}.Release|x64.ActiveCfg = Release|x64
+		{BBD9C918-9260-4C61-B533-0FE5F486C8ED}.Release|x64.Build.0 = Release|x64
+		{BBD9C918-9260-4C61-B533-0FE5F486C8ED}.Release|x86.ActiveCfg = Release|Win32
+		{BBD9C918-9260-4C61-B533-0FE5F486C8ED}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BE04E623-DF0F-4849-80BC-7C881E2F93C1}
+	EndGlobalSection
+EndGlobal
