@@ -11,6 +11,7 @@ int interpret(string code) {
 	vector<unsigned char> tape = { 0 };
 
 	size_t ip = 0;
+	size_t multiplier = 1;
 	size_t cellIndex = 0;
 	size_t loopBeginningIndex;
 
@@ -21,6 +22,8 @@ int interpret(string code) {
 	unordered_map<size_t, size_t> loopTable;
 
 	int stage = 0;
+
+	bool literal = false;
 
 	char instruction;
 	stack<size_t> loopStack;
@@ -42,22 +45,27 @@ int interpret(string code) {
 
 		switch (instruction) {
 		case '+':
-			tape[cellIndex] += 1;
+			tape[cellIndex] += multiplier;
 			break;
 		case '-':
-			tape[cellIndex] -= 1;
+			tape[cellIndex] -= multiplier;
 			break;
 		case '<':
-			cellIndex--;
+			cellIndex -= multiplier;
 			break;
 		case '>':
-			cellIndex++;
+			cellIndex += multiplier;
 			if (cellIndex == tape.size()) {
 				tape.push_back(0);
 			}
 			break;
 		case '.':
-			cout << tape[cellIndex];
+			if (literal) {
+				cout << (int)tape[cellIndex];
+			}
+			else {
+				cout << tape[cellIndex];
+			}
 			break;
 		case ',':
 			if (userInput.empty()) {
@@ -77,20 +85,8 @@ int interpret(string code) {
 				ip = loopTable[ip];
 			}
 			break;
-		case '(':
-			if (stage == 0) stage++;
-			break;
-		case ')':
-			if (stage == 2) {
-				stage = 0;
-
-				for (int i = 0; i < tmp.length(); i++)
-				{
-					tape[cellIndex] = (int)tmp[i];
-				}
-
-				tmp = "";
-			}
+		case '/':
+			literal = !literal;
 			break;
 		}
 
@@ -101,19 +97,8 @@ int interpret(string code) {
 		if (stage == 1) stage++;
 
 		ip++;
+		multiplier = 1;
 	}
-
-	delete &ip;
-	delete &code;
-	delete &tape;
-	delete &cellIndex;
-	delete &userInput;
-	delete &tmp;
-	delete &loopTable;
-	delete &stage;
-	delete &instruction;
-	delete &loopBeginningIndex;
-	delete &loopStack;
 
 	return 0;
 }
