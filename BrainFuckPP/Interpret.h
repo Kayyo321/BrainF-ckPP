@@ -27,9 +27,10 @@ int interpret(string code) {
 	unordered_map<size_t, size_t> loopTable;
 
 	int readChar = 0;
-	int ifStage = 0;
+	int stage = 0;
 
 	bool literal = false;
+	bool lookout = false;
 
 	char instruction;
 	stack<size_t> loopStack;
@@ -122,17 +123,17 @@ int interpret(string code) {
 
 		#pragma region BrainFuck++Code
 		switch (instruction) {
-			case '^':
+			case '^': // Square the current cell.
 				if (readChar != 1) {
 					tape[cellIndex] = (tape[cellIndex] * tape[cellIndex]);
 
 					multiplier = 1;
 				}
 				break;
-			case '*':
-				cout << endl;
+			case '*': // add a new line.
+				if (readChar != 1) cout << endl;
 				break;
-			case '/':
+			case '/': // make next prints literal, meaning they will print out the cell values instead of the ascii values.
 				if (readChar != 1) literal = !literal;
 				break;
 			case '#':
@@ -140,29 +141,83 @@ int interpret(string code) {
 				
 				if (readChar == 0) readChar = 1;
 				break;
-			case '$':
-
-				system("CLS");
-
+			case '$': // clear the screen.
+				if (readChar != 1)
+					system("CLS");
 				break;
-			case '\\':
-				readChar = 1;
+			case '\\': // ignore the next character.
+				if (readChar != 1)
+					readChar = 1;
 
 				ip++;
+				break;
+			case '&': // move values from point a, to point b.
+				if (readChar != 1) lookout = true;
 				break;
 			default:
 				if (isdigit(instruction) && readChar != 1) {
 					multiplier = instruction;
 				}
 				break;
+
+#pragma region Move Statements
+			case '{':
+				readChar = 1;
+
+				if (lookout) {
+					if (stage == 0) stage = 1;
+				}
+				break;
+			case '}':
+				if (lookout) {
+					if (stage == 2) {
+						stage = 0;
+						
+						int moveBy = 0;
+
+						string a = "";
+						int b = 0;
+
+						for (char& c : tmp) {
+							if (c != ';' && stage == 0) {
+								a += c;
+							}
+
+							if (c != ';' && stage == 1) {
+								b += (int)c;
+							}
+
+							if (c == ';') stage = 1;
+						}
+
+						stage = 0;
+
+						for (char& c : a) {
+							switch (c) {
+								case '<':
+									moveBy--;
+									break;
+								case '>':
+									moveBy++;
+									break;
+							}
+						}
+
+						tape[cellIndex + moveBy] = b;
+
+						tmp = "";
+						readChar = 0;
+					}
+				}
+				break;
+#pragma endregion
+
 		}
 		#pragma endregion
 
-		if (ifStage == 1) readChar = 2;
+		if (stage == 2) tmp += instruction;
 
-		if (ifStage == 2) {
-			tmp += instruction;
-		}
+		if (stage == 1) stage = 2;
 
 		ip++;
 
