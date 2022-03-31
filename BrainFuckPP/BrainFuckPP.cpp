@@ -28,6 +28,7 @@ int main() {
 	string program;
 	string path;
 	string tmp;
+	string fileExt;
 
 	fstream file;
 
@@ -36,7 +37,9 @@ int main() {
 	cout << "Enter BrainFuck++ Code-Path : ";
 	cin >> path;
 
-	if (getFileExt(path) != ".bpp") {
+	fileExt = getFileExt(path);
+
+	if (fileExt != "bpp") {
 		cout << "[ ";
 
 		SetConsoleTextAttribute(curConsole, 12);
