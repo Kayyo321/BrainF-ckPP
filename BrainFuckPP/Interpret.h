@@ -7,6 +7,11 @@
 
 using namespace std;
 
+/// <summary>
+/// This function takes all of the code from the code path, and works based of the commands in it.
+/// </summary>
+/// <param name="code"></param>
+/// <returns></returns>
 int interpret(string code) {
 	vector<unsigned char> tape = { 0 };
 
