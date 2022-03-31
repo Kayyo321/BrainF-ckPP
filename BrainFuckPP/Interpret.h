@@ -160,7 +160,7 @@ int interpret(string code) {
 				}
 				break;
 
-#pragma region Move Statements
+		#pragma region Move Statements
 			case '{':
 				readChar = 1;
 
@@ -210,7 +210,7 @@ int interpret(string code) {
 					}
 				}
 				break;
-#pragma endregion
+		#pragma endregion
 
 		}
 		#pragma endregion
